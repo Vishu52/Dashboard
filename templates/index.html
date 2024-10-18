@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualization Dashboard</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .bar {
+            fill: steelblue;
+        }
+        .bar:hover {
+            fill: orange;
+        }
+        .axis--x path,
+        .axis--x line {
+            display: none;
+        }
+        select {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1 style="text-align: center;">Interactive Data Dashboard</h1>
+
+<!-- Filters -->
+<div class="main-div" style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+    <div class="second-div">
+        <label for="yearFilter">Year:</label>
+        <select id="yearFilter"></select>
+    </div>
+    <div class="second-div">
+        <label for="topicFilter">Topics:</label>
+        <select id="topicFilter"></select>
+    </div>
+    <div class="second-div">
+        <label for="sectorFilter">Sector:</label>
+        <select id="sectorFilter"></select>
+    </div>
+    <div class="second-div">
+        <label for="regionFilter">Region:</label>
+        <select id="regionFilter"></select>
+    </div>
+    <div class="second-div">
+        <label for="pestFilter">PEST:</label>
+        <select id="pestFilter"></select>
+    </div>
+    <div class="second-div">
+        <label for="swotFilter">SWOT:</label>
+        <select id="swotFilter"></select>
+    </div>
+    <div class="second-div">
+        <label for="sourceFilter">Source:</label>
+        <select id="sourceFilter"></select>
+    </div>
+    <div class="second-div">
+        <label for="countryFilter">Country:</label>
+        <select id="countryFilter"></select>
+    </div>
+    <div class="second-div">
+        <label for="cityFilter">City:</label>
+        <select id="cityFilter"></select>
+    </div>
+    <div class="second-div">
+        <label for="urlFilter">URL:</label>
+        <select id="urlFilter"></select>
+    </div>
+</div>
+
+<div id="chart"></div>
+
+<script>
+    // Fetch data from the API
+    fetch('http://127.0.0.1:5000/api/data')
+        .then(response => response.json())
+        .then(data => {
+            console.log("Fetched data:", data); // Log fetched data
+            const processedData = data.map(d => ({
+                intensity: d.intensity,
+                source: d.source,
+                relevance: d.relevance,
+                year: d.year,
+                country: d.country,
+                topics: d.topics,
+                region: d.region,
+                city: d.city,
+                sector: d.sector,
+                pest: d.pest,
+                swot: d.swot,
+                url: d.url  // Added URL to the processed data
+            }));
+
+            // Populate filter options using Set to avoid duplicates
+            const years = [...new Set(processedData.map(d => d.year))];
+            const topics = [...new Set(processedData.map(d => d.topics))];
+            const sectors = [...new Set(processedData.map(d => d.sector))];
+            const regions = [...new Set(processedData.map(d => d.region))];
+            const pests = [...new Set(processedData.map(d => d.pest))];
+            const swots = [...new Set(processedData.map(d => d.swot))];
+            const sources = [...new Set(processedData.map(d => d.source))];
+            const countries = [...new Set(processedData.map(d => d.country))];
+            const cities = [...new Set(processedData.map(d => d.city))];
+            const urls = [...new Set(processedData.map(d => d.url))];  // Corrected variable name
+
+            // Populate filters
+            const populateSelect = (selectId, options) => {
+                const select = d3.select(selectId);
+                select.selectAll("option")
+                    .data(options)
+                    .enter().append("option")
+                    .attr("value", d => d)
+                    .text(d => d);
+            };
+
+            populateSelect("#yearFilter", years);
+            populateSelect("#topicFilter", topics);
+            populateSelect("#sectorFilter", sectors);
+            populateSelect("#regionFilter", regions);
+            populateSelect("#pestFilter", pests);
+            populateSelect("#swotFilter", swots);
+            populateSelect("#sourceFilter", sources);
+            populateSelect("#countryFilter", countries);
+            populateSelect("#cityFilter", cities);
+            populateSelect("#urlFilter", urls);  // Corrected variable name
+
+            // Create the chart
+            const drawChart = (filteredData) => {
+                d3.select("#chart").selectAll("*").remove(); // Clear previous chart
+
+                const margin = { top: 20, right: 30, bottom: 40, left: 40 },
+                      width = 600 - margin.left - margin.right, // Increased width for better visualization
+                      height = 400 - margin.top - margin.bottom; // Increased height for better visualization
+
+                const svg = d3.select("#chart")
+                    .append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+                const x = d3.scaleBand()
+                    .domain(filteredData.map(d => d.city)) // Change this to another category if needed
+                    .range([0, width])
+                    .padding(0.1);
+
+                const y = d3.scaleLinear()
+                    .domain([0, d3.max(filteredData, d => d.relevance)]) // Change to the variable you want to visualize
+                    .nice()
+                    .range([height, 0]);
+
+                svg.append("g")
+                    .attr("class", "axis axis--x")
+                    .attr("transform", `translate(0,${height})`)
+                    .call(d3.axisBottom(x));
+
+                svg.append("g")
+                    .attr("class", "axis axis--y")
+                    .call(d3.axisLeft(y));
+
+                svg.selectAll(".bar")
+                    .data(filteredData)
+                    .enter().append("rect")
+                    .attr("class", "bar")
+                    .attr("x", d => x(d.city))
+                    .attr("y", d => y(d.relevance))
+                    .attr("width", x.bandwidth())
+                    .attr("height", d => height - y(d.relevance));
+            };
+
+            // Initial chart drawing
+            drawChart(processedData);
+
+            // Update chart on filter change
+            const filters = [
+                "#yearFilter", "#topicFilter", "#sectorFilter", 
+                "#regionFilter", "#pestFilter", "#swotFilter", 
+                "#sourceFilter", "#countryFilter", "#cityFilter", "#urlFilter"
+            ];
+
+            filters.forEach(filter => {
+                d3.select(filter).on("change", () => {
+                    const selectedFilters = filters.reduce((acc, curr) => {
+                        const selectedValue = d3.select(curr).property("value");
+                        if (selectedValue) {
+                            acc[curr.replace("#", "")] = selectedValue;
+                        }
+                        return acc;
+                    }, {});
+
+                    const filteredData = processedData.filter(d => {
+                        return Object.keys(selectedFilters).every(key => {
+                            return selectedFilters[key] === d[key.replace("Filter", "")];
+                        });
+                    });
+
+                    drawChart(filteredData);
+                });
+            });
+        })
+        .catch(error => console.error('Error fetching data:', error));
+</script>
+
+</body>
+</html>
