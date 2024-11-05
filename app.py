@@ -1,29 +1,319 @@
 from flask import Flask, request, jsonify, render_template
 from flask_mysqldb import MySQL
-from datetime import datetime
+import os
 
 app = Flask(__name__)
 
-# MySQL configuration
+# MySQL configuration using environment variables for sensitive data
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Thakur@52'
+app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD', 'Thakur@52')  # Use env variable or fallback
 app.config['MYSQL_DB'] = 'black_coffer'
 app.config['MYSQL_PORT'] = 3306
 
+# Initialize MySQL
 mysql = MySQL(app)
 
+# Home route
 @app.route("/")
 def home():
     return render_template('index.html')
 
+@app.route('/index')
+def index():
+    return render_template('index.html')
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('index.html')
+
+
+# Todo route
+@app.route('/todo')
+def todo():
+    return render_template('todo.html')
+
+@app.route('/dashboard_1')
+def dashboard_1():
+    return render_template('dashboard-1.html')
+
+@app.route('/form_wizard')
+def form_wizard():
+    return render_template('form-wizard.html')
+
+@app.route('/e_commerce_product_detail')
+def e_commerce_product_detail():
+    return render_template('e-commerce-product-detail.html')
+
+@app.route('/e_commerce_product_list')
+def e_commerce_product_list():
+    return render_template('e-commerce-product-list.html')
+
+@app.route('/app_index')
+def app_index():
+    return render_template('index.html')
+
+# User profile route
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
+@app.route('/account_setting')
+def account_setting():
+    return render_template('account-setting.html')
+
+@app.route('/privacy_setting')
+def privacy_setting():
+    return render_template('privacy-setting.html')
+
+# User profile edit route
+@app.route('/profile-edit')
+def profile_edit():
+    return render_template('profile-edit.html')
+
+
+@app.route('/calendar')
+def calendar():
+    return render_template('calendar.html')
+
+@app.route('/chat')
+def chat():
+    return render_template('chat.html')
+
+@app.route('/ui_colors')
+def ui_colors():
+    return render_template('ui-colors.html')
+
+@app.route('/ui_typography')
+def ui_typography():
+    return render_template('ui-typography.html')
+
+@app.route('/ui_alerts')
+def ui_alerts():
+    return render_template('ui-alerts.html')
+
+@app.route('/ui_badges')
+def ui_badges():
+    return render_template('ui-badges.html')
+
+@app.route('/ui_breadcrumb')
+def ui_breadcrumb():
+    return render_template('ui-breadcrumb.html')
+
+@app.route('/ui_buttons')
+def ui_buttons():
+    return render_template('ui-buttons.html')
+
+@app.route('/ui_cards')
+def ui_cards():
+    return render_template('ui-cards.html')
+
+@app.route('/ui_carousel')
+def ui_carousel():
+    return render_template('ui-carousel.html')
+
+@app.route('/ui_embed_video')
+def ui_embed_video():
+    return render_template('ui-embed-video.html')
+
+@app.route('/ui_grid')
+def ui_grid():
+    return render_template('ui-grid.html')
+
+@app.route('/ui_images')
+def ui_images():
+    return render_template('ui-images.html')
+
+@app.route('/ui_list_group')
+def ui_list_group():
+    return render_template('ui-list-group.html')
+
+@app.route('/ui_media_object')
+def ui_media_object():
+    return render_template('ui-media-object.html')
+
+@app.route('/ui_modal')
+def ui_modal():
+    return render_template('ui-modal.html')
+
+@app.route('/ui_notifications')
+def ui_notifications():
+    return render_template('ui-notifications.html')
+
+@app.route('/ui_pagination')
+def ui_pagination():
+    return render_template('ui-pagination.html')
+
+@app.route('/ui_popovers')
+def ui_popovers():
+    return render_template('ui-popovers.html')
+
+@app.route('/ui_progressbars')
+def ui_progressbars():
+    return render_template('ui-progressbars.html')
+
+@app.route('/ui_tabs')
+def ui_tabs():
+    return render_template('ui-tabs.html')
+
+@app.route('/ui_tooltips')
+def ui_tooltips():
+    return render_template('ui-tooltips.html')
+
+@app.route('/form_layout')
+def form_layout():
+    return render_template('form-layout.html')
+
+@app.route('/form_validation')
+def form_validation():
+    return render_template('form-validation.html')
+
+@app.route('/user_list')
+def user_list():
+    return render_template('user-list.html')
+
+@app.route('/add_user')
+def add_user():
+    return render_template('add-user.html')
+
+
+@app.route('/form_switch')
+def form_switch():
+    return render_template('form-switch.html')
+
+@app.route('/form_chechbox')
+def form_chechbox():
+    return render_template('form-chechbox.html')
+
+@app.route('/form_radio')
+def form_radio():
+    return render_template('form-radio.html')
+
+@app.route('/tables_basic')
+def tables_basic():
+    return render_template('tables-basic.html')
+
+@app.route('/data_table')
+def data_table():
+    return render_template('data-table.html')
+
+@app.route('/table_editable')
+def table_editable():
+    return render_template('table-editable.html')
+
+@app.route('/chart_morris')
+def chart_morris():
+    return render_template('chart-morris.html')
+
+@app.route('/chart_high')
+def chart_high():
+    return render_template('chart-high.html')
+
+@app.route('/chart_am')
+def chart_am():
+    return render_template('chart-am.html')
+
+@app.route('/chart_apex')
+def chart_apex():
+    return render_template('chart-apex.html')
+
+@app.route('/icon_dripicons')
+def icon_dripicons():
+    return render_template('icon-dripicons.html')
+
+@app.route('/icon_fontawesome_5')
+def icon_fontawesome_5():
+    return render_template('icon-fontawesome-5.html')
+
+@app.route('/icon_lineawesome')
+def icon_lineawesome():
+    return render_template('icon-lineawesome.html')
+
+@app.route('/icon_remixicons')
+def icon_remixicon():
+    return render_template('icon-remixicon.html')
+
+@app.route('/icon_unicons')
+def icon_unicons():
+    return render_template('icon-unicons.html')
+
+@app.route('/sign_in')
+def sign_in():
+    return render_template('sign-in.html')
+
+@app.route('/sign_up')
+def sign_up():
+    return render_template('sign-up.html')
+
+@app.route('/pages_recoverpw')
+def pages_recoverpw():
+    return render_template('pages-recoverpw.html')
+
+@app.route('/pages_confirm_mail')
+def pages_confirm_mail():
+    return render_template('pages-confirm-mail.html')
+
+@app.route('/pages_lock_screen')
+def pages_lock_screen():
+    return render_template('pages-lock-screen.html')
+
+@app.route('/pages_map')
+def pages_map():
+    return render_template('pages-map.html')
+
+@app.route('/pages_timeline')
+def pages_timeline():
+    return render_template('pages-timeline.html')
+
+@app.route('/pages_invoice')
+def pages_invoice():
+    return render_template('pages-invoice.html')
+
+@app.route('/blank_page')
+def blank_page():
+    return render_template('blank-page.html')
+
+@app.route('/pages_error')
+def pages_error():
+    return render_template('pages-error.html')
+
+@app.route('/pages_error_500')
+def pages_error_500():
+    return render_template('pages-error-500.html')
+
+@app.route('/pages_pricing')
+def pages_pricing():
+    return render_template('pages-pricing.html')
+
+@app.route('/pages_pricing_one')
+def pages_pricing_one():
+    return render_template('pages-pricing-one.html')
+
+@app.route('/pages_maintenance')
+def pages_maintenance():
+    return render_template('pages-maintenance.html')
+
+@app.route('/pages_comingsoon')
+def pages_comingsoon():
+    return render_template('pages-comingsoon.html')
+
+@app.route('/pages_faq')
+def pages_faq():
+    return render_template('pages-faq.html')
+
+
+# Add the rest of your HTML routes similarly
+
+# CRUD API routes
+
+# Create data (POST)
 @app.route('/api/data', methods=['POST'])
 def create_data():
     data = request.get_json()
     try:
         cur = mysql.connection.cursor()
-        cur.execute(""" 
-            INSERT INTO your_table ( 
+        cur.execute("""
+            INSERT INTO your_table (
                 end_year, intensity, sector, topic, insight,
                 url, region, start_year, impact, added,
                 published, country, relevance, pestle, source,
@@ -43,6 +333,53 @@ def create_data():
         return jsonify({"message": "Data created successfully"}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+# Update data (PUT)
+@app.route('/api/data/<int:id>', methods=['PUT'])
+def edit_data(id):
+    data = request.get_json()
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("""
+            UPDATE your_table SET 
+                end_year = %s, intensity = %s, sector = %s, topic = %s, insight = %s,
+                url = %s, region = %s, start_year = %s, impact = %s, added = %s,
+                published = %s, country = %s, relevance = %s, pestle = %s, source = %s,
+                title = %s, likelihood = %s 
+            WHERE id = %s""",
+            (
+                data.get('end_year'), data.get('intensity'), data.get('sector'),
+                data.get('topic'), data.get('insight'), data.get('url'),
+                data.get('region'), data.get('start_year'), data.get('impact'),
+                data.get('added'), data.get('published'), data.get('country'),
+                data.get('relevance'), data.get('pestle'), data.get('source'),
+                data.get('title'), data.get('likelihood'), id
+            )
+        )
+        mysql.connection.commit()
+        cur.close()
+
+        if cur.rowcount == 0:
+            return jsonify({"error": "No data found with this ID"}), 404
+        return jsonify({"message": "Data updated successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# Delete data (DELETE)
+@app.route('/api/data/<int:id>', methods=['DELETE'])
+def delete_data(id):
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM your_table WHERE id = %s", (id,))
+        mysql.connection.commit()
+        cur.close()
+        
+        if cur.rowcount == 0:
+            return jsonify({"error": "No data found with this ID"}), 404
+        return jsonify({"message": "Data deleted successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
@@ -65,7 +402,7 @@ def get_data():
             "source": "EIA",
             "title": "U.S. natural gas consumption is expected to increase during much of the projection period.",
             "likelihood": 3
-        },
+        },       
         {
             "end_year": "",
             "intensity": 6,
@@ -19049,5 +19386,14 @@ def get_data():
         }
     ]), 200
 
+@app.route('/privacy-policy')
+def privacy_policy():
+    return render_template('privacy_policy.html')
+
+@app.route('/terms-of-service')
+def terms_of_service():
+    return render_template('terms_of_service.html')
+
+# Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
