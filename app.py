@@ -7,11 +7,11 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 # MySQL configuration using environment variables for sensitive data
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD', 'Thakur@52')  # Use env variable or fallback
-app.config['MYSQL_DB'] = 'black_coffer'
-app.config['MYSQL_PORT'] = 3306
+# app.config['MYSQL_HOST'] = 'localhost'
+# app.config['MYSQL_USER'] = 'root'
+# app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD', 'Thakur@52')  # Use env variable or fallback
+# app.config['MYSQL_DB'] = 'black_coffer'
+# app.config['MYSQL_PORT'] = 3306
 
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Thakur%4052@localhost:3306/black_coffer"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
