@@ -227,27 +227,30 @@ def pages_faq():
 def create_data():
     data = request.get_json()
     try:
-        cur = mysql.connection.cursor()
-        cur.execute("""
-            INSERT INTO your_table (
-                end_year, intensity, sector, topic, insight,
-                url, region, start_year, impact, added,
-                published, country, relevance, pestle, source,
-                title, likelihood
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
-            (
-                data.get('end_year'), data.get('intensity'), data.get('sector'),
-                data.get('topic'), data.get('insight'), data.get('url'),
-                data.get('region'), data.get('start_year'), data.get('impact'),
-                data.get('added'), data.get('published'), data.get('country'),
-                data.get('relevance'), data.get('pestle'), data.get('source'),
-                data.get('title'), data.get('likelihood')
-            )
+        new_record = your_table2(
+            end_year=data.get('end_year'),
+            intensity=data.get('intensity'),
+            sector=data.get('sector'),
+            topic=data.get('topic'),
+            insight=data.get('insight'),
+            url=data.get('url'),
+            region=data.get('region'),
+            start_year=data.get('start_year'),
+            impact=data.get('impact'),
+            added=data.get('added'),
+            published=data.get('published'),
+            country=data.get('country'),
+            relevance=data.get('relevance'),
+            pestle=data.get('pestle'),
+            source=data.get('source'),
+            title=data.get('title'),
+            likelihood=data.get('likelihood')
         )
-        mysql.connection.commit()
-        cur.close()
+        db.session.add(new_record)
+        db.session.commit()
         return jsonify({"message": "Data created successfully"}), 201
     except Exception as e:
+        db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
 # Update data (PUT)
