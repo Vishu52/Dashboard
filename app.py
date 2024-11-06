@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify, render_template
 from flask_mysqldb import MySQL
 import os
+from flask_sqlalchemy import SQLAlchemy
+
 
 app = Flask(__name__)
 
@@ -10,6 +12,11 @@ app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD', 'Thakur@52')  # Use env variable or fallback
 app.config['MYSQL_DB'] = 'black_coffer'
 app.config['MYSQL_PORT'] = 3306
+
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Thakur%4052@localhost:3306/black_coffer"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
 
 # Initialize MySQL
 mysql = MySQL(app)
@@ -70,6 +77,15 @@ def privacy_setting():
 @app.route('/profile-edit')
 def profile_edit():
     return render_template('profile-edit.html')
+
+
+# edit form data storing
+
+
+
+
+
+
 
 
 @app.route('/calendar')
@@ -172,11 +188,44 @@ def form_validation():
 def user_list():
     return render_template('user-list.html')
 
+
+# add user form opening
 @app.route('/add_user')
 def add_user():
     return render_template('add-user.html')
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(100),unique=True, nullable=False)
+    last_name = db.Column(db.String(100),unique=True, nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
 
+    def __repr__(self):
+        return f'<User {self.name}>'
+    
+with app.app_context():
+    db.create_all()
+
+
+@app.route('/submit', methods=['POST'])
+def submit():
+    # Get form data
+    username = request.form.get('username')
+    email = request.form.get('email')
+
+    # Check if data is received
+    if username and email:
+        # Create a new user instance
+        new_user = User(username=username, email=email)
+        
+        # Add the user to the session and commit
+        db.session.add(new_user)
+        db.session.commit()
+        
+        return "User added successfully!"
+    else:
+        return "Error: Missing form data!"
+        
 @app.route('/form_switch')
 def form_switch():
     return render_template('form-switch.html')
