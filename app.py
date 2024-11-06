@@ -1,12 +1,25 @@
 from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 import os
+import pymysql
 
 app = Flask(__name__)
+try:
+    connection = pymysql.connect(
+        host="127.0.0.1",
+        user="root",
+        password="Thakur@52",
+        database="black_coffer",
+        port=3306
+    )
+    print("Connection successful!")
+    connection.close()
+except pymysql.MySQLError as e:
+    print("Connection failed:", e)
 
 # MySQL configuration for SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Thakur%4052@127.0.0.1:3306/black_coffer"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Thakur%4052@127.0.0.1:3306/black_coffer"
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # Home route
