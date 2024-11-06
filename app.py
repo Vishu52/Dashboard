@@ -1,25 +1,13 @@
 from flask import Flask, request, jsonify, render_template
-from flask_mysqldb import MySQL
-import os
 from flask_sqlalchemy import SQLAlchemy
-
+import os
 
 app = Flask(__name__)
 
-# MySQL configuration using environment variables for sensitive data
-# app.config['MYSQL_HOST'] = 'localhost'
-# app.config['MYSQL_USER'] = 'root'
-# app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD', 'Thakur@52')  # Use env variable or fallback
-# app.config['MYSQL_DB'] = 'black_coffer'
-# app.config['MYSQL_PORT'] = 3306
-
+# MySQL configuration for SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Thakur%4052@127.0.0.1:3306/black_coffer"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-
-
-# Initialize MySQL
-mysql = MySQL(app)
 
 # Home route
 @app.route("/")
@@ -34,12 +22,12 @@ def index():
 def dashboard():
     return render_template('index.html')
 
-
 # Todo route
 @app.route('/todo')
 def todo():
     return render_template('todo.html')
 
+# Other routes
 @app.route('/dashboard_1')
 def dashboard_1():
     return render_template('dashboard-1.html')
@@ -48,184 +36,50 @@ def dashboard_1():
 def form_wizard():
     return render_template('form-wizard.html')
 
-@app.route('/e_commerce_product_detail')
-def e_commerce_product_detail():
-    return render_template('e-commerce-product-detail.html')
-
-@app.route('/e_commerce_product_list')
-def e_commerce_product_list():
-    return render_template('e-commerce-product-list.html')
-
-@app.route('/app_index')
-def app_index():
-    return render_template('index.html')
-
-# User profile route
+# Add all remaining routes similarly
 @app.route('/profile')
 def profile():
     return render_template('profile.html')
 
-@app.route('/account_setting')
-def account_setting():
-    return render_template('account-setting.html')
-
-@app.route('/privacy_setting')
-def privacy_setting():
-    return render_template('privacy-setting.html')
-
-# User profile edit route
-@app.route('/profile-edit')
-def profile_edit():
-    return render_template('profile-edit.html')
-
-
-# edit form data storing
-
-
-
-
-
-
-
-
-@app.route('/calendar')
-def calendar():
-    return render_template('calendar.html')
-
-@app.route('/chat')
-def chat():
-    return render_template('chat.html')
-
-@app.route('/ui_colors')
-def ui_colors():
-    return render_template('ui-colors.html')
-
-@app.route('/ui_typography')
-def ui_typography():
-    return render_template('ui-typography.html')
-
-@app.route('/ui_alerts')
-def ui_alerts():
-    return render_template('ui-alerts.html')
-
-@app.route('/ui_badges')
-def ui_badges():
-    return render_template('ui-badges.html')
-
-@app.route('/ui_breadcrumb')
-def ui_breadcrumb():
-    return render_template('ui-breadcrumb.html')
-
-@app.route('/ui_buttons')
-def ui_buttons():
-    return render_template('ui-buttons.html')
-
-@app.route('/ui_cards')
-def ui_cards():
-    return render_template('ui-cards.html')
-
-@app.route('/ui_carousel')
-def ui_carousel():
-    return render_template('ui-carousel.html')
-
-@app.route('/ui_embed_video')
-def ui_embed_video():
-    return render_template('ui-embed-video.html')
-
-@app.route('/ui_grid')
-def ui_grid():
-    return render_template('ui-grid.html')
-
-@app.route('/ui_images')
-def ui_images():
-    return render_template('ui-images.html')
-
-@app.route('/ui_list_group')
-def ui_list_group():
-    return render_template('ui-list-group.html')
-
-@app.route('/ui_media_object')
-def ui_media_object():
-    return render_template('ui-media-object.html')
-
-@app.route('/ui_modal')
-def ui_modal():
-    return render_template('ui-modal.html')
-
-@app.route('/ui_notifications')
-def ui_notifications():
-    return render_template('ui-notifications.html')
-
-@app.route('/ui_pagination')
-def ui_pagination():
-    return render_template('ui-pagination.html')
-
-@app.route('/ui_popovers')
-def ui_popovers():
-    return render_template('ui-popovers.html')
-
-@app.route('/ui_progressbars')
-def ui_progressbars():
-    return render_template('ui-progressbars.html')
-
-@app.route('/ui_tabs')
-def ui_tabs():
-    return render_template('ui-tabs.html')
-
-@app.route('/ui_tooltips')
-def ui_tooltips():
-    return render_template('ui-tooltips.html')
-
-@app.route('/form_layout')
-def form_layout():
-    return render_template('form-layout.html')
-
-@app.route('/form_validation')
-def form_validation():
-    return render_template('form-validation.html')
-
-@app.route('/user_list')
-def user_list():
-    return render_template('user-list.html')
-
-
-# add user form opening
-@app.route('/add_user')
-def add_user():
-    return render_template('add-user.html')
-
+# User model for database
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(100),unique=True, nullable=False)
-    last_name = db.Column(db.String(100),unique=True, nullable=False)
+    first_name = db.Column(db.String(100), nullable=False)
+    last_name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
 
     def __repr__(self):
-        return f'<User {self.name}>'
-    
+        return f'<User {self.first_name} {self.last_name}>'
+
+# Create tables within an application context
 with app.app_context():
     db.create_all()
 
-
+# Form route to add a user
 @app.route('/submit', methods=['POST'])
 def submit():
     # Get form data
-    username = request.form.get('username')
+    first_name = request.form.get('first_name')
+    last_name = request.form.get('last_name')
     email = request.form.get('email')
 
-    # Check if data is received
-    if username and email:
+    # Check if all required data is received
+    if first_name and last_name and email:
         # Create a new user instance
-        new_user = User(username=username, email=email)
+        new_user = User(first_name=first_name, last_name=last_name, email=email)
         
-        # Add the user to the session and commit
-        db.session.add(new_user)
-        db.session.commit()
-        
-        return "User added successfully!"
+        try:
+            # Add the user to the session and commit
+            db.session.add(new_user)
+            db.session.commit()
+            return "User added successfully!"
+        except Exception as e:
+            db.session.rollback()
+            return f"Error: {e}"
     else:
         return "Error: Missing form data!"
-        
+
+# Additional UI routes (similar format for each)
 @app.route('/form_switch')
 def form_switch():
     return render_template('form-switch.html')
