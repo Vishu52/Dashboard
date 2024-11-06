@@ -18,8 +18,8 @@ except pymysql.MySQLError as e:
     print("Connection failed:", e)
 
 # MySQL configuration for SQLAlchemy
-# app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Thakur%4052@127.0.0.1:3306/black_coffer"
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Thakur%4052@127.0.0.1:3306/black_coffer"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # Home route
