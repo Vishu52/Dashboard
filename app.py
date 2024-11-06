@@ -13,7 +13,7 @@ app = Flask(__name__)
 # app.config['MYSQL_DB'] = 'black_coffer'
 # app.config['MYSQL_PORT'] = 3306
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Thakur%4052@localhost:3306/black_coffer"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Thakur%4052@127.0.0.1:3306/black_coffer"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
