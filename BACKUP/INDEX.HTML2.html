@@ -46,17 +46,6 @@
                </div>
                <span>Vito</span>
                </a>
-               {% with messages = get_flashed_messages(with_categories=true) %}
-               {% if messages %}
-                  <div class="flash-messages">
-                     {% for category, message in messages[:1] %}
-                        <div class="alert alert-{{ category }}">
-                           {{ message }}
-                        </div>
-                     {% endfor %}
-                  </div>
-               {% endif %}
-            {% endwith %}
                <div class="iq-menu-bt-sidebar">
                   <div class="iq-menu-bt align-self-center">
                      <div class="wrapper-menu">
@@ -155,24 +144,24 @@
                      <li>
                         <a href="#authentication" class="iq-waves-effect collapsed" data-toggle="collapse" aria-expanded="false"><i class="ri-pages-line"></i><span>Authentication</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
                         <ul id="authentication" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
-                           <li><a href="{{ url_for('sign_in') }}" class="ri-login-box-line"></i>Login</a></li>
+                           <!-- <li><a href="{{ url_for('sign_in') }}" class="ri-login-box-line"></i>Login</a></li>
                            <li><a href="{{ url_for('sign_up') }}" class="ri-login-circle-line"></i>Register</a></li>
                            <li><a href="{{ url_for('pages_recoverpw') }}"class="ri-record-mail-line"></i>Recover Password</a></li>
                            <li><a href="{{ url_for('pages_confirm_mail') }}"class="ri-file-code-line"></i>Confirm Mail</a></li>
-                           <li><a href="{{ url_for('pages_lock_screen') }}" class="ri-lock-line"></i>Lock Screen</a></li>
+                           <li><a href="{{ url_for('pages_lock_screen') }}" class="ri-lock-line"></i>Lock Screen</a></li> -->
                         </ul>
                      </li>
                      <li>
                         <a href="#map-page" class="iq-waves-effect collapsed" data-toggle="collapse" aria-expanded="false"><i class="ri-map-pin-user-line"></i><span>Maps</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
                         <ul id="map-page" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
-                           <li><a href="{{ url_for('pages_map') }}" class="ri-google-line"></i>Google Map</a></li>
+                           <!-- <li><a href="{{ url_for('pages_map') }}" class="ri-google-line"></i>Google Map</a></li> -->
                            
                         </ul>
                      </li>
                      <li>
                         <a href="#extra-pages" class="iq-waves-effect collapsed" data-toggle="collapse" aria-expanded="false"><i class="ri-pantone-line"></i><span>Extra Pages</span><i class="ri-arrow-right-s-line iq-arrow-right"></i></a>
                         <ul id="extra-pages" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
-                           <li><a href="{{ url_for('pages_timeline') }}" class="ri-map-pin-time-line"></i>Timeline</a></li>
+                           <!-- <li><a href="{{ url_for('pages_timeline') }}" class="ri-map-pin-time-line"></i>Timeline</a></li>
                            <li><a href=""class="ri-question-answer-line"></i>Invoice</a></li>
                            <li><a href="{{ url_for('blank_page') }}"class="ri-invision-line"></i>Blank Page</a></li>
                            <li><a href="{{ url_for('pages_error') }}" class="ri-error-warning-line"></i>Error 404</a></li>
@@ -181,7 +170,7 @@
                            <li><a href="{{ url_for('pages_pricing_one') }}" class="ri-price-tag-2-line"></i>Pricing 1</a></li>
                            <li><a href="{{ url_for('pages_maintenance') }}" class="ri-archive-line"></i>Maintenance</a></li>
                            <li><a href="{{ url_for('pages_comingsoon') }}" class="ri-mastercard-line"></i>Coming Soon</a></li>
-                           <li><a href="{{ url_for('pages_faq') }}" class="ri-compasses-line"></i>Faq</a></li>
+                           <li><a href="{{ url_for('pages_faq') }}" class="ri-compasses-line"></i>Faq</a></li> -->
                         </ul>
                      </li>
                      <li>
@@ -220,7 +209,7 @@
                      <li class="nav-item">
                         <a href="{{ url_for('index') }}" class="nav-link"><i class="ri-home-4-line"></i></a>
                      </li>
-                     <li><a href="{{ url_for('chat') }}" class="nav-link"><i class="ri-message-line"></i></a></li>                    
+                     <!-- <li><a href="{{ url_for('chat') }}" class="nav-link"><i class="ri-message-line"></i></a></li>                     -->
                      <li><a href="{{ url_for('profile') }}" class="nav-link"><i class="ri-question-answer-line"></i></a></li>
                      <li><a href="{{ url_for('todo') }}" class="nav-link"><i class="ri-chat-check-line"></i></a></li>
                   </ul>
@@ -231,17 +220,17 @@
                         <div class="searchbox-datalink">
                            <h6 class="pl-3 pt-3 pb-3">Pages</h6>
                            <ul class="m-0 pl-3 pr-3 pb-3">
-                              <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('index') }}" class="nav-link"><i class="ri-home-4-line pr-2"></i>Dashboard</a></li>
-                              <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('dashboard_1') }}" class="nav-link router-link-exact-active router-link-active pr-2"><i class="ri-home-3-line pr-2"></i>Dashboard-1</a></li>
-                              <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('chat') }}" class="nav-link"><i class="ri-message-line pr-2"></i>Chat</a></li>
-                              <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('calendar') }}" class="nav-link"><i class="ri-calendar-2-line pr-2"></i>Calendar</a></li>
-                              <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('profile') }}" class="nav-link"><i class="ri-profile-line pr-2"></i>Profile</a></li>
-                              <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('todo') }}" class="nav-link"><i class="ri-chat-check-line pr-2"></i>Todo</a></li> 
-                              <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('app_index') }}" class="nav-link"><i class="ri-mail-line pr-2"></i>Email</a></li> 
-                              <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('e_commerce_product_list') }}" class="nav-link"><i class="ri-message-line pr-2"></i>Product Listing</a></li> 
-                              <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('e_commerce_product_detail') }}" class="nav-link"><i class="ri-file-list-line pr-2"></i>Product Details</a></li> 
-                              <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('pages_faq') }}"class="nav-link"><i class="ri-compasses-line pr-2"></i>Faq</a></li> 
-                              <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('form_wizard') }}" class="nav-link"><i class="ri-clockwise-line pr-2"></i>Form-wizard</a></li> 
+                              <!-- <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('index') }}" class="nav-link"><i class="ri-home-4-line pr-2"></i>Dashboard</a></li> -->
+                              <!-- <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('dashboard_1') }}" class="nav-link router-link-exact-active router-link-active pr-2"><i class="ri-home-3-line pr-2"></i>Dashboard-1</a></li> -->
+                              <!-- <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('chat') }}" class="nav-link"><i class="ri-message-line pr-2"></i>Chat</a></li> -->
+                              <!-- <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('calendar') }}" class="nav-link"><i class="ri-calendar-2-line pr-2"></i>Calendar</a></li> -->
+                              <!-- <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('profile') }}" class="nav-link"><i class="ri-profile-line pr-2"></i>Profile</a></li> -->
+                              <!-- <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('todo') }}" class="nav-link"><i class="ri-chat-check-line pr-2"></i>Todo</a></li> -->
+                              <!-- <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('app_index') }}" class="nav-link"><i class="ri-mail-line pr-2"></i>Email</a></li> -->
+                              <!-- <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('e_commerce_product_list') }}" class="nav-link"><i class="ri-message-line pr-2"></i>Product Listing</a></li> -->
+                              <!-- <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('e_commerce_product_detail') }}" class="nav-link"><i class="ri-file-list-line pr-2"></i>Product Details</a></li> -->
+                              <!-- <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('pages_faq') }}"class="nav-link"><i class="ri-compasses-line pr-2"></i>Faq</a></li> -->
+                              <!-- <li class="iq-bg-primary-hover rounded"><a href="{{ url_for('form_wizard') }}" class="nav-link"><i class="ri-clockwise-line pr-2"></i>Form-wizard</a></li> -->
                            </ul>
                         </div>
                      </form>
@@ -468,7 +457,6 @@
                                  </a>
                                  <div class="d-inline-block w-100 text-center p-3">
                                     <a class="btn btn-primary dark-btn-primary" href="{{ url_for('sign_up') }}" role="button">Sign out<i class="ri-login-box-line ml-2"></i></a>
-                                    <form class="mt-4" method="POST" action="{{ url_for('sign_up') }}"></form>
                                  </div>
                               </div>
                            </div>

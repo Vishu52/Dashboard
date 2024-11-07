@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import os
 import pymysql
+from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 # try:
@@ -20,13 +21,58 @@ app = Flask(__name__)
 # MySQL configuration for SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Thakur%4052@127.0.0.1:3306/black_coffer"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = 'hellop'  # Needed for flash messages
+
 db = SQLAlchemy(app)
 
 # Home route
 @app.route("/")
 def home():
-    return render_template('index.html')
+    return render_template('sign-up.html')
 
+
+class RegisteredUser(db.Model):
+    __tablename__ = 'register_user'
+    id = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+
+# Create tables within an application context
+with app.app_context():
+    db.create_all()
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        full_name = request.form['full_name']
+        email = request.form['email']
+        password = request.form['password']
+
+        # Validate that all fields are filled
+        if not full_name or not email or not password:
+            flash('Please fill in all fields!', 'error')
+            return redirect(url_for('signup'))
+
+        # Hash the password using werkzeug.security
+        # hashed_password = generate_password_hash(password)
+
+        # Check if the email already exists in the database
+        existing_user = RegisteredUser.query.filter_by(email=email).first()
+        if existing_user:
+            flash('Email already exists!', 'error')
+            return redirect(url_for('signup'))
+
+        # Create a new user and add to the database
+        new_user = RegisteredUser(full_name=full_name, email=email, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+
+        flash('Signup successful! Please log in.', 'success')
+        return redirect(url_for('sign_in'))
+
+    return render_template('sign-in.html')
 @app.route('/index')
 def index():
     return render_template('index.html')
@@ -49,6 +95,28 @@ def dashboard_1():
 def form_wizard():
     return render_template('form-wizard.html')
 
+@app.route('/app_index')
+def app_index():
+    return render_template('app_index.html')
+
+@app.route('/e_commerce_product_list')
+def e_commerce_product_list():
+    return render_template('e-commerce-product-list.html')
+
+@app.route('/e_commerce_product_detail')
+def e_commerce_product_detail():
+    return render_template('e-commerce-product-detail.html')
+
+@app.route('/account_setting')
+def account_setting():
+    return render_template('account-setting.html')
+
+@app.route('/privacy_setting')
+def privacy_setting():
+    return render_template('privacy-setting.html')
+
+
+
 # Add all remaining routes similarly
 @app.route('/profile')
 def profile():
@@ -57,8 +125,7 @@ def profile():
 # User model for database
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(100), nullable=False)
-    last_name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
 
     def __repr__(self):
@@ -73,19 +140,21 @@ with app.app_context():
 def submit():
     # Get form data
     first_name = request.form.get('first_name')
-    last_name = request.form.get('last_name')
     email = request.form.get('email')
 
     # Check if all required data is received
-    if first_name and last_name and email:
+    if first_name  and email:
         # Create a new user instance
-        new_user = User(first_name=first_name, last_name=last_name, email=email)
+        new_user = User(name=first_name, email=email)
         
         try:
             # Add the user to the session and commit
             db.session.add(new_user)
             db.session.commit()
-            return "User added successfully!"
+            flash("User added successfully!", "success")
+
+
+            return render_template('index.html')
         except Exception as e:
             db.session.rollback()
             return f"Error: {e}"
@@ -101,13 +170,21 @@ def form_switch():
 def form_chechbox():
     return render_template('form-chechbox.html')
 
-@app.route('/form_radio')
-def form_radio():
-    return render_template('form-radio.html')
+@app.route('/profile_edit')
+def profile_edit():
+    return render_template('profile-edit.html')
 
-@app.route('/tables_basic')
-def tables_basic():
-    return render_template('tables-basic.html')
+@app.route('/user_list')
+def user_list():
+    return render_template('user-list.html')
+
+@app.route('/calendar')
+def calendar():
+    return render_template('calendar.html')
+
+@app.route('/chat')
+def chat():
+    return render_template('chat.html')
 
 @app.route('/data_table')
 def data_table():
@@ -133,10 +210,6 @@ def chart_am():
 def chart_apex():
     return render_template('chart-apex.html')
 
-@app.route('/icon_dripicons')
-def icon_dripicons():
-    return render_template('icon-dripicons.html')
-
 @app.route('/icon_fontawesome_5')
 def icon_fontawesome_5():
     return render_template('icon-fontawesome-5.html')
@@ -156,10 +229,6 @@ def icon_unicons():
 @app.route('/sign_in')
 def sign_in():
     return render_template('sign-in.html')
-
-@app.route('/sign_up')
-def sign_up():
-    return render_template('sign-up.html')
 
 @app.route('/pages_recoverpw')
 def pages_recoverpw():
@@ -216,6 +285,110 @@ def pages_comingsoon():
 @app.route('/pages_faq')
 def pages_faq():
     return render_template('pages-faq.html')
+
+@app.route('/add_user')
+def add_user():
+    return render_template('add-user.html')
+
+@app.route('/ui_typography')
+def ui_typography():
+    return render_template('ui-typography.html')
+
+@app.route('/ui_alerts')
+def ui_alerts():
+    return render_template('ui-alerts.html')
+
+@app.route('/ui_badges')
+def ui_badges():
+    return render_template('ui-badges.html')
+
+@app.route('/ui_breadcrumb')
+def ui_breadcrumb():
+    return render_template('ui-breadcrumb.html')
+
+@app.route('/ui_buttons')
+def ui_buttons():
+    return render_template('ui-buttons.html')
+
+@app.route('/ui_cards')
+def ui_cards():
+    return render_template('ui_cards.html')
+
+@app.route('/ui_carousel')
+def ui_carousel():
+    return render_template('ui-carousel.html')
+
+@app.route('/ui_embed_video')
+def ui_embed_video():
+    return render_template('ui-embed-video.html')
+
+@app.route('/ui_grid')
+def ui_grid():
+    return render_template('ui-grid.html')
+
+@app.route('/ui_images')
+def ui_images():
+    return render_template('ui-images.html')
+
+@app.route('/ui_list_group')
+def ui_list_group():
+    return render_template('ui-list-group.html')
+
+@app.route('/ui_media_object')
+def ui_media_object():
+    return render_template('ui-media-object.html')
+
+@app.route('/ui_modal')
+def ui_modal():
+    return render_template('ui_modal.html')
+
+@app.route('/ui_notifications')
+def ui_notifications():
+    return render_template('ui-notifications.html')
+
+@app.route('/ui_pagination')
+def ui_pagination():
+    return render_template('ui-pagination.html')
+
+@app.route('/ui_popovers')
+def ui_popovers():
+    return render_template('ui_popovers.html')
+
+@app.route('/ui_progressbars')
+def ui_progressbars():
+    return render_template('ui-progressbars.html')
+
+@app.route('/ui_tabs')
+def ui_tabs():
+    return render_template('ui-tabs.html')
+
+@app.route('/ui_tooltips')
+def ui_tooltips():
+    return render_template('ui-tooltips.html')
+
+@app.route('/form_layout')
+def form_layout():
+    return render_template('form-layout.html')
+
+@app.route('/form_validation')
+def form_validation():
+    return render_template('form-validation.html')
+
+@app.route('/form_radio')
+def form_radio():
+    return render_template('form-radio.html')
+
+@app.route('/tables_basic')
+def tables_basic():
+    return render_template('tables-basic.html')
+
+@app.route('/icon_dripicons')
+def icon_dripicons():
+    return render_template('icon_dripicons.html')
+
+@app.route('/ui_colors')
+def ui_colors():
+    return render_template('ui-colors.html')
 
 
 # Add the rest of your HTML routes similarly
