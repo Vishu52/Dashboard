@@ -20,7 +20,8 @@ except pymysql.MySQLError as e:
     print("Connection failed:", e)
 
 # MySQL configuration for SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Thakur%4052@127.0.0.1:3306/black_coffer"
+# app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Thakur%4052@127.0.0.1:3306/black_coffer"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://dashdb_3s8u_user:9GRcVcLSJtUBqCImZt94oDj174Qdpo6v@dpg-csmr28qj1k6c73dn6o90-a/dashdb_3s8u"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'hellop'  # Needed for flash messages
 
