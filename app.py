@@ -2,26 +2,26 @@ from flask import Flask, render_template, request, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
 from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash
 
 app = Flask(__name__)
 
-# # Test the MySQL connection
-# try:
-#     connection = pymysql.connect(
-#         host="127.0.0.1",
-#         user="root",
-#         password="Thakur@52",  # Use the correct password
-#         database="black_coffer",
-#         port=3306
-#     )
-#     print("Connection successful!")
-#     connection.close()
-# except pymysql.MySQLError as e:
-#     print("Connection failed:", e)
+# Test the MySQL connection
+try:
+    connection = pymysql.connect(
+        host="127.0.0.1",
+        user="root",
+        password="Thakur@52",  # Use the correct password
+        database="black_coffer",
+        port=3306
+    )
+    print("Connection successful!")
+    connection.close()
+except pymysql.MySQLError as e:
+    print("Connection failed:", e)
 
 # MySQL configuration for SQLAlchemy
-# app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Thakur%4052@127.0.0.1:3306/black_coffer"
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://dashdb_3s8u_user:9GRcVcLSJtUBqCImZt94oDj174Qdpo6v@dpg-csmr28qj1k6c73dn6o90-a/dashdb_3s8u"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Thakur%4052@127.0.0.1:3306/black_coffer"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'hellop'  # Needed for flash messages
 
@@ -34,7 +34,7 @@ def home():
     return render_template('sign-up.html')
 
 
-class RegisteredUser(db.Model):
+class user2(db.Model):
     __tablename__ = 'register_user'
     id = db.Column(db.Integer, primary_key=True)
     full_name = db.Column(db.String(100), nullable=False)
@@ -59,23 +59,24 @@ def signup():
             return redirect(url_for('signup'))
 
         # Hash the password using werkzeug.security
-        # hashed_password = generate_password_hash(password)
+        hashed_password = generate_password_hash(password)
 
         # Check if the email already exists in the database
-        existing_user = RegisteredUser.query.filter_by(email=email).first()
+        existing_user = User.query.filter_by(email=email).first()
         if existing_user:
             flash('Email already exists!', 'error')
             return redirect(url_for('signup'))
 
         # Create a new user and add to the database
-        new_user = RegisteredUser(full_name=full_name, email=email, password=password)
+        new_user = User(full_name=full_name, email=email, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
 
         flash('Signup successful! Please log in.', 'success')
-        return redirect(url_for('sign_in'))
+        return redirect(url_for('login'))
 
     return render_template('sign-in.html')
+
 @app.route('/index')
 def index():
     return render_template('index.html')
@@ -229,10 +230,33 @@ def icon_remixicon():
 def icon_unicons():
     return render_template('icon-unicons.html')
 
-@app.route('/sign_in')
-def sign_in():
-    
-    return render_template('sign-in.html')
+
+# Route for the login page
+class User2(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)  # Store hashed password
+
+# Route for the login page
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')  # .get() is safer than directly indexing
+        password = request.form.get('password')
+
+        if username and password:
+            # Query the database for the user
+            user2 = User2.query.filter_by(username=username).first()
+
+            if user2 and check_password_hash(user2.password, password):  # Compare password
+                # Successfully logged in, redirect to the index page
+                return redirect(url_for('index'))
+            else:
+                # Invalid credentials
+                flash('Invalid username or password. Please try again.', 'danger')
+                return redirect(url_for('login'))  # Reload the login page
+
+    return render_template('index.html')
 
 @app.route('/pages_recoverpw')
 def pages_recoverpw():
