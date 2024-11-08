@@ -5,19 +5,19 @@ from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 
-# Test the MySQL connection
-try:
-    connection = pymysql.connect(
-        host="127.0.0.1",
-        user="root",
-        password="Thakur@52",  # Use the correct password
-        database="black_coffer",
-        port=3306
-    )
-    print("Connection successful!")
-    connection.close()
-except pymysql.MySQLError as e:
-    print("Connection failed:", e)
+# # Test the MySQL connection
+# try:
+#     connection = pymysql.connect(
+#         host="127.0.0.1",
+#         user="root",
+#         password="Thakur@52",  # Use the correct password
+#         database="black_coffer",
+#         port=3306
+#     )
+#     print("Connection successful!")
+#     connection.close()
+# except pymysql.MySQLError as e:
+#     print("Connection failed:", e)
 
 # MySQL configuration for SQLAlchemy
 # app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:Thakur%4052@127.0.0.1:3306/black_coffer"
